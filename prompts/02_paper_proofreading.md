@@ -200,6 +200,7 @@ Check for:
 
 #### Methodology / Equations
 
+- **Generic section title (MINOR)** — flag if the main methodology section is titled with a generic name such as `"Method"`, `"Methodology"`, `"Proposed Method"`, `"Our Method"`, `"Approach"`, or `"Our Approach"`. A descriptive title that hints at the technical approach (e.g., `"Hierarchical Scene Graph Construction"` or `"Sparse-to-Dense Matching Pipeline"`) helps reviewers scanning the paper structure and signals what is novel. Suggest a more descriptive alternative based on the section's actual content.
 - **Equation re-explanation** — if an equation is defined in the method section and then referenced again in the ablation or experiments section, the surrounding text must use a cross-reference rather than re-explain the terms:
   - ❌ Ablation re-typesetting Eq. (3) and re-defining all variables as if it is the first occurrence
   - ✔ `"Removing $\mathcal{L}_{\text{reg}}$ from \eqref{eq:total_loss} leads to..."`
@@ -257,7 +258,7 @@ Check each caption for:
 - Color coding and markers explained in caption
 - Subfigure labels `(a)`, `(b)`, `(c)` clearly matched to caption sub-descriptions
 - Figure referenced in text **before** it appears in the document (no forward references for figures)
-- Figures defined but **never referenced** anywhere in the text
+- **Unreferenced figures (CRITICAL)** — every `\begin{figure}` must be cited at least once in the body text via `\ref{}`, `\cref{}`, `\Cref{}`, or `\autoref{}`. Figures must be tightly coupled to the narrative; a figure that never appears in a reference call is dead weight, signals poor editing, and will be flagged by reviewers. Scan every figure label and confirm it is referenced somewhere; flag any orphan figure as CRITICAL.
 - Inconsistent figure reference style (`"Fig. 3"` vs `"Figure 3"` vs `"\Cref{}"`) — standardize
 - Axis labels and legends readable at typical print size
 - **Font size consistency** — fonts used inside figures (axis labels, tick labels, legends, annotations) should not be noticeably larger than the caption font size (`\footnotesize` in most IEEE/RA-L templates). Oversized in-figure text looks unpolished and inconsistent with the surrounding text. Flag if fonts appear significantly larger than the caption.
@@ -269,6 +270,7 @@ Check each caption for:
 
 #### Tables
 
+- **Unreferenced tables (CRITICAL)** — every `\begin{table}` must be cited at least once in the body text via `\ref{}`, `\cref{}`, `\Cref{}`, or `\autoref{}`. Tables must be tightly coupled to the narrative; an uncited table suggests the author forgot to discuss its results and wastes reviewer attention. Scan every table label and confirm it is referenced somewhere; flag any orphan table as CRITICAL.
 - Bold/underline convention for best/second-best values **defined in every table caption** — not just visually implied
 - Asterisks or special markers should be explained either in caption or in a footnote
 - Consistent metric names across all tables
