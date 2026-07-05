@@ -90,6 +90,8 @@ There are two supported ways to use this repository.
 git clone https://github.com/LimHyungTae/awesome-claudecode-paper-proofreading.git ~/awesome-claudecode-paper-proofreading
 ```
 
+- **[Context Kit](https://github.com/JDDavenport/context-kit)** — Gives Claude persistent session context via 4 PCA templates. Reduces re-explaining your writing style + background each session. MIT.
+
 ### Option 1 — Claude Code direct prompt use
 
 These prompts are used from **inside your paper workspace**, not from inside this repository.
