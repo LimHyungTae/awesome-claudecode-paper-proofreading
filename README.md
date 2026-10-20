@@ -13,7 +13,7 @@ ______________________________________________________________________
 
 This repository is designed to work with **both Claude Code and Codex** while preserving the original proofreading philosophy.
 
-The detailed instructions live in two prompt files. You can use them directly in a session, or copy/merge them into Codex-oriented workspace instructions such as `AGENTS.md`.
+The detailed instructions live in the `prompts/` folder. You can use them directly in a session, or copy/merge them into Codex-oriented workspace instructions such as `AGENTS.md`. For PhD theses in robotics, use [`prompts/04_thesis_proofreading.md`](prompts/04_thesis_proofreading.md).
 
 The workflow remains **two-phase**: the agent detects and lists all issues with unique numbers `[1]`, `[2]`, `[3]`..., then waits. The user selects which issues to fix or discard before any file is modified.
 
@@ -35,16 +35,6 @@ The review rules in these prompts reflect the standards expected at top robotics
 ______________________________________________________________________
 
 ## :page_facing_up: Files
-
-### [`AGENTS.md`](AGENTS.md)
-
-Optional Codex coordinator instructions for the workflow:
-
-- detects first and waits before editing
-- chooses between workspace audit and paper proofreading
-- reads the full LaTeX workspace recursively
-- applies only approved fixes in Phase 2
-- points Codex to the authoritative prompt files
 
 ### [`prompts/01_latex_workspace_review.md`](prompts/01_latex_workspace_review.md)
 
@@ -77,6 +67,23 @@ Optional Codex coordinator instructions for the workflow:
 | G | Abstract (WHY→PROBLEM→HOW→RESULTS) & conclusion quality |
 | H | Notation consistency: symbol overload, boldface vectors, coordinate frames |
 | I | Hyphenation: compound adjectives, `-ly` adverb rule |
+
+### [`prompts/04_thesis_proofreading.md`](prompts/04_thesis_proofreading.md)
+
+**PhD thesis proofreading (robotics)** — the paper checklist extended with checks for long, multi-chapter documents, from the perspective of an external examiner.
+
+| Category | Description |
+|----------|-------------|
+| A | Thesis architecture: T-structure, chapters building on each other, research question traceability, consistent chapter structure |
+| B | Chapter-level structure: chapter introductions and summaries, equation narrative, experiment purpose, real-robot validation |
+| C | Paragraph flow and motivation reminders: paragraph logic, signposting, stale cross-references |
+| D | Standalone and adjacent-field readability |
+| E | Cross-chapter consistency and contradictions: claims, numbers, names, spelling variant, "we" vs "I" |
+| F | Abbreviations across a long document: re-introduction after long gaps, per-chapter expansion, list of abbreviations |
+| G | Heading hierarchy and casing: Title Case vs Sentence case, no lone subsections, stacked headings |
+| H | Literature review coverage of every technical chapter, gaps, currency |
+| I–P | Paper checks adapted to theses: language, paper leftovers ("in this paper"), claims, captions (short captions, attribution of reused figures), LaTeX, abstract/intro/conclusion, notation, hyphenation |
+| Q | Front matter, back matter, and bibliography: statements of contribution, publication notices, appendices |
 
 ______________________________________________________________________
 
@@ -137,25 +144,36 @@ fix all critical    ← fix only CRITICAL issues
 proceed with all    ← fix everything
 ```
 
-### Option 2 — Codex workspace setup with `AGENTS.md` plus `prompts/`
+### Step 5 (theses) — Run the thesis proofreader
 
-Copy `AGENTS.md` and the `prompts/` directory into your paper workspace:
+For a PhD thesis, use the thesis prompt instead of the paper prompt in Step 3. Provide the root `.tex` file and the compiled PDF; the PDF is needed for page distances, the List of Figures, and figure placement:
+
+```text
+@~/awesome-claudecode-paper-proofreading/prompts/04_thesis_proofreading.md
+
+@thesis.tex @thesis.pdf
+```
+
+For long theses, `thesis-level only` and `show chapter X only` keep the review focused.
+
+### Option 2 — Codex workspace setup with `prompts/`
+
+Copy the `prompts/` directory into your paper or thesis workspace:
 
 ```bash
-cp ~/awesome-claudecode-paper-proofreading/AGENTS.md /path/to/your/paper/AGENTS.md
 cp -R ~/awesome-claudecode-paper-proofreading/prompts /path/to/your/paper/
 ```
 
-Launch Codex from the paper root so it can pick up `AGENTS.md`, then ask for the workflow you want:
+Launch Codex from the workspace root and point it at the prompt you want:
 
 ```
-Run the LaTeX workspace review on `main.tex`.
+Follow prompts/01_latex_workspace_review.md for `main.tex`.
 ```
 
 or
 
 ```
-Proofread `main.tex` against `paper.pdf`.
+Follow prompts/04_thesis_proofreading.md for `thesis.tex` and `thesis.pdf`.
 ```
 
 ______________________________________________________________________
@@ -177,7 +195,7 @@ This setup also works in CI or other non-GUI environments as long as the agent r
 Recommended pattern:
 
 1. Check out your paper repository.
-2. Copy in `AGENTS.md` plus `prompts/`, or inline the prompt content into one file.
+2. Copy in `prompts/`, or inline the prompt content into your workspace's `AGENTS.md`.
 3. Ask the agent to run the workspace review or proofreading pass.
 
 ______________________________________________________________________

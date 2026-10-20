@@ -14,6 +14,7 @@ Keep the review rules unchanged when reusing this file so the two-phase workflow
 Act as a strict conference reviewer at the level of **ICRA, RSS, NeuriPS, T-RO, IJRR, T-PAMI, or CVPR**.
 Detect subtle clarity issues, logical gaps, and language errors — not just grammar mistakes.
 You are thorough, direct, and unforgiving of vague writing.
+Model the reader as a tired, rushed, inattentive, but not fundamentally hostile reviewer: the text must continually say what it is doing, why it matters, and why each part is there. When in doubt, flag anything that makes the work harder to understand than necessary; err on the side of too easy.
 
 > **Do NOT rewrite the manuscript. Only detect and report issues.**
 > **Do NOT modify any files during Phase 1.**
@@ -95,6 +96,8 @@ Check for:
 - Passive voice overuse where active voice is clearer
 - Missing Oxford comma in enumerations (e.g., `"size, weight, and orientation"`)
 - Comma splices and run-on sentences
+- **List punctuation** — a colon introduces a list; items that contain commas are separated by semicolons (`"three settings: low, as in X; default; and high, as in Y"`). In `itemize` lists, use one convention: full sentences ending with full stops, or fragments separated by semicolons with the last item ending in a full stop
+- **Eponyms are capitalised** — `Gaussian`, `Euclidean`, `Jacobian`, `Hessian`, `Mahalanobis`, `Voronoi`, `Kalman`, `Bayesian`, `Markov`, `Fourier`, `Cartesian`; do not capitalise ordinary words by analogy (`"cosine distance"`)
 
 ---
 
@@ -173,6 +176,13 @@ Check for:
   - `"demonstrate"` used for an unproven claim — distinguish between "we show" (in results) and "we demonstrate" (implies stronger proof)
 - **Causal logic gaps** — motivation stated without demonstrating the connection
   - ❌ `"Because fast speed is critical, our method combines X and Y"` → why does this motivation imply this design?
+- **Contribution type and evaluation fit (MAJOR if mismatched)** — identify what kind of contribution the paper claims and check that the evaluation matches it:
+  - **"Better than before"** (improving an established task, e.g., SLAM or VPR): requires comparison against the strongest *current* methods on established benchmarks, under the same protocol.
+  - **New problem or capability** (no established benchmark): requires a justified evaluation protocol, meaningful baselines (including the simplest one that could work), and an explanation of why standard benchmarks do not apply.
+  - For a new task or application, the text must also sell its relevance to robotics: why it matters, for which systems, and what it enables.
+  - **Contribution pillars**: theory or idea, experimental evidence, and effort (dataset, system, benchmark). Most contributions are strong in one or two; the contribution statement should say which, and should not claim all three by default.
+- **Motivation fit (MINOR; MAJOR if the main motivation does not match the work)** — the motivation must connect to what the work actually does. Flag framing that the work never uses or tests: a "bio-inspired" framing when no component is bio-inspired, autonomous driving as motivation when experiments use a small indoor robot, or deployment scenarios whose requirements (speed, scale, conditions) the experiments never approach. Motivation should be specific and current (named applications, quantified requirements), not generic.
+- **Unnecessary claims ("don't die on unnecessary hills", MINOR)** — make the claims needed to justify the research and nothing more. Flag broad, general assertions about the field, a sensor, or a research direction that the work does not need and does not test (e.g., sweeping statements about where "the advantage of event cameras lies"); they invite objections without strengthening the argument.
 - **Unsupported limitation statements** — limitations introduced but not bounded, addressed, or cited
 - **Variables or symbols used before being defined** — flag every occurrence
 - **Acronyms used before first expansion** — flag first occurrence in abstract and body separately
@@ -186,9 +196,20 @@ Check for:
 
 ### CATEGORY D — Structure & Flow
 
+#### Title and Front Page
+
+- **Title (MINOR)** — concise and specific; remove vague or redundant words (`"Towards"`, `"A Novel Approach for"`, `"An Efficient Method for"`, `"Using"` chains). A coined system acronym should be short and pronounceable, not contrived or whimsical, and must not collide with an existing well-known method name.
+- **Front page** — for a 6–8 page paper, the title, abstract, and most of the introduction are on page 1; together with the front-page figure (see `03_figure_feedback.md`, Figure 1), they decide whether a reviewer reads on.
+
 #### Introduction
 
 - **Main contribution paragraph** — verify there is a dedicated paragraph that explicitly starts with or centers on the main contribution. The reader must not have to infer it.
+- **Name the contributions** — use the word "contribution" explicitly (`"Our main contributions are: ..."`) so that reviewers can find and quote them.
+- **Length** — for a 6–8 page double-column paper, the introduction should fit roughly within the first page. Flag introductions that run well into page 2 (MINOR).
+- **Framing and significance** — the introduction should frame the work either by the problem domain (e.g., localisation of autonomous vehicles) or by the technique being improved, and must state why the improvement matters, not only what it is (MAJOR if the significance is never stated).
+- **Difference from prior work** — each contribution should say how it differs from the closest prior work, not only what it is.
+- **Contribution specificity and weighting (MINOR)** — each contribution must be specific (what kind of improvement, by how much, under which conditions; which new theory; which new sensing modality or capability), and the list must make the relative weight clear (main contribution first; secondary contributions such as a released dataset marked as such). An evaluation is not a contribution: flag items such as `"Extensive experiments on ..."` or `"Extensive field trials"` listed as contributions, unless the experiments themselves (e.g., a new benchmark) are the contribution.
+- **Closing roadmap** — the introduction may end with a short roadmap of the remaining sections; if present, it must list every section in order, with descriptions that match the section content.
 
 #### Related Work
 
@@ -197,10 +218,16 @@ Check for:
 - **Quantitative scope claims** inconsistent with the citation list:
   - ❌ `"There are only a few works using diffusion models [1, 2, 3, 4, 5]"` → not a few
 - **Key difference** — at least one mention of how the proposed approach differs from prior work must appear somewhere in the Related Work section, either at the end of each thematic paragraph or in a brief closing paragraph. Flag as MAJOR if the entire section describes prior methods with zero comparison to this work.
+- **Tone** — discuss prior work objectively; criticise only the shortcomings that the paper actually addresses. Flag dismissive wording (`"naive"`, `"fails to"`, `"simply"`) applied to other authors' work (MINOR).
+- **Closing recap** — the section should end with a short recap that summarises the landscape and sets up the gap the paper fills (MINOR if missing).
+- **Old and new** — cite pioneering work as well as recent work; flag a Related Work section that cites only the last few years for a long-standing problem (MINOR).
 
 #### Methodology / Equations
 
 - **Generic section title (MINOR)** — flag if the main methodology section is titled with a generic name such as `"Method"`, `"Methodology"`, `"Proposed Method"`, `"Our Method"`, `"Approach"`, or `"Our Approach"`. A descriptive title that hints at the technical approach (e.g., `"Hierarchical Scene Graph Construction"` or `"Sparse-to-Dense Matching Pipeline"`) helps reviewers scanning the paper structure and signals what is novel. Suggest a more descriptive alternative based on the section's actual content.
+- **Section overview** — the method section should open with an overview of its components and how they fit together before the first subsection (see "glue" under General).
+- **Foundational vs novel (MAJOR if unclear)** — standard components described to keep the paper self-contained must be clearly marked as prior work (`"Following X~\cite{...}, we ..."`), so that reviewers can see exactly which parts are the paper's contribution. Flag method sections where adopted and new components are indistinguishable.
+- **Method vs experimental setup** — the method section describes the approach; *how it was tested* (datasets, platforms, metrics, parameter values and how they were chosen, baselines) belongs in the experimental setup. Flag setup details mixed into the method and vice versa (MINOR).
 - **Equation re-explanation** — if an equation is defined in the method section and then referenced again in the ablation or experiments section, the surrounding text must use a cross-reference rather than re-explain the terms:
   - ❌ Ablation re-typesetting Eq. (3) and re-defining all variables as if it is the first occurrence
   - ✔ `"Removing $\mathcal{L}_{\text{reg}}$ from \eqref{eq:total_loss} leads to..."`
@@ -208,15 +235,45 @@ Check for:
   - ❌ `"This is achieved by optimizing \eqref{eq:loss}."` (no explanation of what the optimization achieves or what the terms are)
   - ✔ `"We minimize \eqref{eq:loss}, where $\lambda$ controls the trade-off between reconstruction and regularization."`
 
+**Equations in the text flow** — equations are part of sentences:
+- The equation completes the sentence and takes a comma or full stop where the sentence needs one; do not put a colon before an equation
+  - ❌ `"and the gain $\alpha$ is given by: $$\alpha = ...$$"` or `"... is given by (1)."` followed by the equation
+  - ✔ `"The gain $$\alpha = \frac{XY}{Z},$$ where $X$ is ..., controls ..."`
+- No blank line after the equation unless a new paragraph starts (otherwise `"where ..."` becomes an indented new paragraph)
+- Define every symbol immediately after the equation, with its domain where helpful (`$\mathbf{R} \in SO(3)$`, `$\mathbf{t} \in \mathbb{R}^3$`)
+- No forward references to equations; number only the equations that are referenced later
+
 #### Experimental Evaluation
 
+- **Experimental setup section** — datasets, robot platforms, metrics, baselines, and parameter values with how they were chosen must be described in a dedicated setup section or subsection before the results. A footnote with a link to code or data helps replication; check that it respects the venue's anonymity rules (CRITICAL if it de-anonymises a double-blind submission).
+- **Results overview** — the results section should open with a sentence or two on what the subsections show (quantitative results, analysis, ablations, robot demonstrations).
 - **Experiment purpose statement** — every experiment or subsection in the evaluation must open with a clear statement of (a) WHY the experiment is there, (b) WHAT claim it supports, and (c) HOW it demonstrates the claim:
   - ❌ Jumping directly into numbers without stating what the experiment is intended to show
   - ✔ `"The following experiment is designed to support our first claim that \methodname achieves lower ATE than baseline methods under dynamic conditions."`
 - **Experiment ordering** — the most impressive or most claim-critical experiment should come first. Runtime/efficiency experiments should come last unless real-time performance is the primary contribution.
+- **Not a fluke (MAJOR if the main claim rests on one setting)** — experiments must convince the reader that the result is not specific to one route, dataset, platform, or condition: use several substantially different environments or datasets, with one flagship experiment and smaller supporting ones. Prefer a real robot; otherwise data recorded on real robots. Flag main claims supported by a single environment or a single sequence.
+- **Indeterminate trade-offs (MINOR)** — when a result shows a trade-off (speed vs accuracy, resolution vs cost, rate vs informativeness), the text must quantify both sides and say which setting to choose in which situation. Flag optimisations whose cost on the other side is never reported (e.g., a compression step with timing results but no accuracy results).
 - **Claim coverage** — verify that every claim made in the introduction is covered by at least one experiment. Flag any claim with no supporting result.
 
 #### General
+
+- **"Glue" before subheadings (MINOR)** — every major section should start with a short introductory paragraph that contextualises what follows; flag a section heading followed directly by a subsection heading.
+- **Sentence purpose (STYLE)** — near submission, every sentence should have one clear purpose. Flag sentences that only repeat the previous one, announce what the next sentence says, or add nothing; also flag places where a necessary sentence is missing (e.g., a result without the sentence that interprets it).
+- **Paragraph test** — near submission, every paragraph should carry one clear message that the document needs, and it should be possible to summarise it in one short sentence. Flag paragraphs that cannot be summarised this way (multi-themed, or no clear message), and suggest splitting, rewording, or removing them.
+
+**Anticipated reviewer objections ("multistep anticipation", MAJOR when a central objection is unanswered):**
+
+Read the paper as a sceptical reviewer would, and predict the questions it raises in order: the first objection, then the follow-up once the first is answered. For each chain, check whether the text answers it before the reviewer has to ask:
+
+- ❌ `"The system issues corrections at 300 Hz."` → *Reviewer: "Why does the rate matter, if the tracking error equals that of the 30 Hz baselines?"* → *"Would the same FFT pipeline applied to conventional frames not be just as fast?"* The paper answers neither.
+- ✔ The paper shows where the higher rate pays off (higher speed, lower compute or energy, lower latency under fast motion), and includes an ablation that applies the same matching pipeline to conventional frames.
+- Typical first objections: *Is the problem already solved?* *Why not use the obvious alternative (a different sensor, an off-the-shelf feature, a simpler baseline)?* *Does the gain come from the claimed ingredient or from another part of the pipeline?* *Does it generalise beyond the tested platform, dataset, or conditions?*
+
+Flag each unanswered central objection as a numbered issue; these are the questions that otherwise appear in the reviews and the rebuttal.
+
+- **Digressions (the "iceberg" principle, STYLE; MINOR if a section drifts)** — a document distils far more work than it shows. Flag paragraphs, asides, and background passages that do not serve the argument of their section (e.g., history or analogies that are never used again, alternatives described "though outside the scope"). Move detail that only documents effort to supplementary material.
+- **Skimmability (MINOR)** — reviewers are often tired or reading in fragments. A reader who reads only the abstract, the first paragraph of the introduction, the contribution list, the section openings, and Figure 1 must still get the problem, the contributions, and the key results. Flag places where the key point of a section is only found deep in its body.
+
 
 - **Repetition across sections**
   - Experimental setup described in both the method section and results section
@@ -250,6 +307,10 @@ Check each caption for:
     - ✔ `"Comparison against baseline approaches~\cite{lim2022quatro,yang2021teaser,lim2025kissmatcher}."` (grouped citation also acceptable)
   - **Dataset names identified** — if results are shown per dataset or sequence, the dataset must be named or cited in the caption
 - **No duplication of body text** — captions must not summarize the method section paragraph
+- **Concise** — a few sentences at most, not an essay
+- **No meta-openers** — never start with `"This figure shows ..."`; never write `"a photograph of the robot"` when `"the robot"` suffices
+- **Legend instead of prose** — for plots, use a legend rather than caption text such as `"the red line shows X and the dashed blue line shows Y"`
+- **Takeaway** — for result figures and tables, the caption should state the takeaway in one sentence (what the reader should see), without turning into a results discussion
 - **Tense consistency** within captions
 - **Period at end** of every caption
 
@@ -276,6 +337,10 @@ Check each caption for:
 - Consistent metric names across all tables
 - Units included in column headers
 - `\hline` instead of `\toprule`/`\midrule`/`\bottomrule` — flag if venue uses booktabs style
+
+#### Float Placement
+
+- Let floats float: use `[t]` (or the default) so figures and tables go to the top of a column or page. `[h]`, `[H]`, and `[htbp]` pull floats into the text flow, create uneven white space, and cost space (MINOR)
 
 #### Reference Order
 
@@ -316,6 +381,11 @@ Check for the following patterns:
 | Inconsistent figure reference | `Figure 3` vs `Fig. 3` | standardize to one style |
 | Equation reference style | `equation (3)`, `Eq. 3` | `\Cref{eq:xxx}`. The output should be either (3) or Eq. (3)|
 | Unit without thin space | `6.1m × 6.1m` | `6.1\,m $\times$ 6.1\,m` |
+| Units in italics | `$5 m$`, `$10 Hz$` | `5\,m` or `$5\,\mathrm{m}$`; units are always upright |
+| Unit symbol in prose | `"x is the distance in m"` | `"x is the distance in metres"`; symbols only after numbers |
+| Straight or mismatched quotes | `"robust"`, ``` ``robust" ``` | ``` ``robust'' ``` |
+| Inter-sentence space after abbreviation | `Liu et al. said`, `vs. X` | `Liu et al.~said` (or `\etal`, `\ie`, `\eg` macros) |
+| Unprotected capitals in BibTeX titles | `title = {Visual SLAM for AUVs}` → typeset as "slam", "auvs" | `title = {Visual {SLAM} for {AUV}s}` |
 | Missing Oxford comma | `size, foo, bar and orientation` | `size, foo, bar, and orientation` |
 | bare `i.e.` or `e.g.` | `i.e., the result` / `e.g., KITTI` | use `\ie` / `\eg` macros (see below) |
 | `et al.` without period | `et al ` | `et al.` |
@@ -351,6 +421,7 @@ Also check:
 Check that the abstract follows the WHY → PROBLEM → HOW → RESULTS structure:
 
 - **WHY** (1–2 sentences): answers "why is this relevant? why should I care?" — sets the motivation without deep technical detail
+- Keep the WHY short: a reader looking for papers on the topic must learn what *this* paper does within the first two or three sentences, and the abstract should not become a summary of what everybody else does. Some advisors prefer starting directly with `"In this paper, we present ..."`; either is acceptable if the paper's own work is front-loaded
 - **PROBLEM** (1 sentence): clearly states the specific problem the paper addresses, starting with something like "In this paper, we address the problem of..."
 - **HOW & WHAT** (~3 sentences): how the problem is approached in general, what is new, what makes the contribution special
 - **RESULTS** (1 sentence): key outcome or result of the work
@@ -371,6 +442,8 @@ Additional checks:
 - Limitations acknowledged (even briefly)
 - Future work is specific, not vague — if present, it should start with: `"Despite these encouraging results, there is further space for improvement."` Flag if future work is mentioned without this grounding sentence or without specific directions
 - No new experimental results or claims introduced for the first time
+- Past tense for what the paper did (`"In this paper, we showed ..."`), mirroring the abstract and introduction
+- **Tempting future work (MAJOR if central)** — flag future-work items that an examiner or reviewer will expect to have been done already: cheap experiments (sensitivity analyses, an obvious ablation), combining components the work already has, or the experiment that would test the work's own central hypothesis. Either do them or explain why they were out of reach.
 
 ---
 
@@ -409,6 +482,11 @@ For each flagged symbol, suggest either:
   - Random vectors or special cases use `\boldsymbol{}` when the symbol is Greek: `\boldsymbol{\mu}`, `\boldsymbol{\Sigma}`
   - Scalars remain non-bold: `d`, `n`, `\lambda`
 - Flag any place where a vector/matrix appears non-bold in an equation, and any place where a scalar is incorrectly bolded
+
+**Subscripts:**
+- Keep subscripts short, ideally a single letter, never a phrase
+- Multi-letter text subscripts must be upright (`$x_{\text{max}}$` or `$x_{\mathrm{max}}$`); `$x_{max}$` is set as the product m·a·x in italics
+- Use `\mathbb{R}` for the real numbers, not `\mathcal{R}`
 
 **Coordinate frame notation:**
 - Flag inconsistent frame notation styles used for the same transformation:
@@ -452,6 +530,10 @@ When the first word is an adverb ending in **-ly**, no hyphen is used regardless
 ❌ "locally-consistent"  →  ✅ "locally consistent"
 ❌ "sparsely-connected"  →  ✅ "sparsely connected"
 ```
+
+**Rule 3 — Same words as a noun: no hyphen**
+
+A compound is hyphenated only when it acts as an adjective before a noun: `"the pseudo inverse is ..."` (noun) but `"a pseudo-inverse solution"` (adjective); `"zero mean"` but `"a zero-mean signal"`; `"in real time"` but `"a real-time system"`. Words with the prefix `non` (`nonlinear`, `nonholonomic`, `nonmonotonic`) are usually closed up without a hyphen; there is no universal agreement, so require consistency rather than one form.
 
 **Common patterns to flag in robotics/CV papers:**
 
